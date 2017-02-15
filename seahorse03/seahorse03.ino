@@ -1,4 +1,10 @@
 /*--------------------------------------
+ * 
+ * extra comment in here
+ * 
+ */
+ 
+ /* 
 expected blue tooth values:
 0 - turn off sea horse
 1 - turn on sea horse
