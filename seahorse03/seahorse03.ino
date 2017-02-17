@@ -1,15 +1,9 @@
 /*--------------------------------------
- 
-
-
-
-
-
-expected blue tooth values:
-0 - turn off sea horse
-1 - turn on sea horse
-int > 1 will play numbered mp3 from /mp3 folder 
---------------------------------------*/
+  expected blue tooth values:
+  0 - turn off sea horse
+  1 - turn on sea horse
+  int > 1 will play numbered mp3 from /mp3 folder
+  --------------------------------------*/
 //
 //
 #include <SoftwareSerial.h>
@@ -22,7 +16,7 @@ int blueToothVal;      // value sent over via bluetooth
 int pSwitch = 12;      // pin that shorts out seahorse switch
 int pLight = 13;       // state indicator led
 //
-int pVolume =15;
+int pVolume = 15;
 //
 void setup()
 {
@@ -46,25 +40,25 @@ void setup()
 void loop()
 {
   BTSerial.listen();
-  if (BTSerial.available()){
+  if (BTSerial.available()) {
     //if there is data being recieved
     blueToothVal = BTSerial.parseInt(); //read it
 
     doFlash(blueToothVal); //flash pin 13 as debug
-    
-    if (blueToothVal == 0) { 
+
+    if (blueToothVal == 0) {
       //digitalWrite(pLight, LOW);            //turn off LED
       fadeOut();
       pushButton(2000); //long press
       //mp3_stop ();
     }
-    else if (blueToothVal == 1) { 
+    else if (blueToothVal == 1) {
       pushButton(10); //short press
     }
-    else if(blueToothVal == 2){
+    else if (blueToothVal == 2) {
       setVolume(-3);
     }
-    else if(blueToothVal == 3){
+    else if (blueToothVal == 3) {
       setVolume(3);
     }
     else {
@@ -81,48 +75,48 @@ void loop()
 //
 //--(functions and shit)---------------------------------------------------------------------------------------------
 //
-void setVolume(int aAmount){
+void setVolume(int aAmount) {
   pVolume = pVolume + aAmount;
-  if(pVolume<0){
+  if (pVolume < 0) {
     pVolume = 0;
-  }else if(pVolume>30){
+  } else if (pVolume > 30) {
     pVolume = 30;
   }
   mp3_set_volume (pVolume);
 }
 //
 void pushButton(int aLength) {
-  //emulate push and push and hold button of seahorse 
+  //emulate push and push and hold button of seahorse
   digitalWrite(pSwitch, HIGH);
   delay(aLength);
   digitalWrite(pSwitch, LOW);
 }
 //
-void doFlash(int aNum){
-  while(aNum>0){
+void doFlash(int aNum) {
+  while (aNum > 0) {
     digitalWrite(pLight, HIGH);
     delay(200);
     digitalWrite(pLight, LOW);
     delay(200);
     aNum--;
-   }
+  }
 }
 //
 //
-void fadeOut(){
+void fadeOut() {
   int tVolume = pVolume;
-  while (tVolume >0){
+  while (tVolume > 0) {
     tVolume--;
-    if(tVolume<0){
-      tVolume=0;
+    if (tVolume < 0) {
+      tVolume = 0;
     }
     delay(10);
     Serial.print("volume");
     Serial.println(tVolume);
     mp3_set_volume (tVolume);
- }
- Serial.println("mp3 stop");      
- delay(5);
- mp3_stop ();
+  }
+  Serial.println("mp3 stop");
+  delay(5);
+  mp3_stop ();
 }
 
